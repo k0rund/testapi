@@ -1,0 +1,25 @@
+{
+    "name": "herloct/codeception-slim-module-example",
+    "description": "Sample project for my herloct/codeception-slim-module.",
+    "type": "project",
+    "require": {
+        "slim/slim": "^3.7"
+    },
+    "require-dev": {
+        "codeception/codeception": "3.0.0",
+        "herloct/codeception-slim-module": "^1.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "herloct",
+            "email": "herloct@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/App"
+        }
+    },
+    "minimum-stability": "stable"
+}

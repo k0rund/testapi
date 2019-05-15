@@ -1,0 +1,7 @@
+class_name: UnitTester
+modules:
+    enabled:
+        - Asserts
+        - \Herloct\Codeception\Module\Slim:
+            container: container.php
+

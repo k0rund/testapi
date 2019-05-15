@@ -1,0 +1,9 @@
+class_name: FunctionalTester
+modules:
+    enabled:
+        - \Helper\Functional
+        - REST:
+            depends: PhpBrowser
+            url: 'http://172.25.0.101'
+            curl:
+               CURLOPT_RETURNTRANSFER: true

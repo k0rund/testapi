@@ -1,0 +1,55 @@
+# Версия docker-compose
+version: '2'
+# Список наших сервисов (контейнеров)
+services:
+    nginx:
+    # используем последний стабильный образ nginx
+        image: nginx:latest
+        networks:
+            static-network:
+                ipv4_address: 172.25.0.101
+        # маршрутизируем порты
+        ports:
+            - "80:80"
+            - "443:443"
+        # монтируем директории, слева директории на основной машине, справа - куда они монтируются в контейнере
+        volumes:
+            - ./hosts:/etc/nginx/conf.d
+            - ./www:/var/www
+            - ./logs:/var/log/nginx
+        # nginx должен общаться с php контейнером
+        links:
+            - php
+    php:
+        # у нас свой образ для PHP, указываем путь к нему и говорим что его надо собрать
+        build: ./images/php
+        networks:
+            static-network:
+                ipv4_address: 172.25.0.102
+        # монтируем директорию с проектами
+        volumes:
+            - ./www:/var/www
+    mysql:
+        image: mysql:8
+        command: mysqld --default-authentication-plugin=mysql_native_password
+        networks:
+            static-network:
+                ipv4_address: 172.25.0.103
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./mysql:/var/lib/mysql
+            - ./dump/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+        # задаем пароль для root пользователя
+        environment:
+            MYSQL_PORT: 3306
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_USER: user
+            MYSQL_PASSWORD: secret
+            MYSQL_DATABASE: api
+networks:
+  static-network:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.25.0.0/24
